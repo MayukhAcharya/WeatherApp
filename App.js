@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  Alert,
-} from "react-native";
+import { Image, StyleSheet, Text, View, TextInput, Alert } from "react-native";
+import { Button, IconButton } from "react-native-paper";
 import axios from "axios";
 
 export default function App() {
   const [text, setText] = useState("");
-  const [temp, settemp] = useState([]);
-  const [feel, setFeel] = useState([]);
+  const [temp, settemp] = useState([0]);
+  const [feel, setFeel] = useState([0]);
 
   //API Call
   const Weatherfetch = (text) => {
@@ -23,8 +16,8 @@ export default function App() {
       url: `https://api.openweathermap.org/data/2.5/weather?q=${text}&APPID=e372c354feb0d0a782d5e94cf94ff932`,
     })
       .then((response) => {
-        settemp(response.data.main.temp - 273);
-        setFeel(response.data.main.feels_like - 273);
+        settemp(response.data.main.temp - 273.15);
+        setFeel(response.data.main.feels_like - 273.15);
         //Alert.alert("response", JSON.stringify(response.data.main.temp - 273));
         //area name,Temp,Feels like,etc etc.....in place of alert
       })
@@ -37,6 +30,9 @@ export default function App() {
   useEffect(() => {
     Weatherfetch();
   }, []);
+
+  let correcttemp = parseInt(temp).toFixed(2);
+  let correctfeels = parseInt(feel).toFixed(2);
 
   return (
     <View style={styles.container}>
@@ -52,10 +48,19 @@ export default function App() {
         onSubmitEditing={(value) => setText(value.nativeEvent.text)}
         defaultValue={text}
       />
-      <View style={styles.txt1}>
-        <Button title="Weather" onPress={() => Weatherfetch(text)} />
-        <Text>Temp = {temp}</Text>
-        <Text>Feels Like = {feel}</Text>
+      <View style={styles.button1}>
+        <IconButton
+          size={20}
+          color={"#fff"}
+          icon={{ uri: "https://img.icons8.com/ios-glyphs/344/search--v1.png" }}
+          onPress={() => Weatherfetch(text)}
+          style={styles.button1}
+        />
+      </View>
+
+      <View style={styles.view2}>
+        <Text>Temp = {correcttemp} &deg;C</Text>
+        <Text>Feels Like = {correctfeels} &deg;C</Text>
       </View>
 
       <StatusBar backgroundColor="white" barStyle="light-content" />
@@ -77,11 +82,24 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     position: "absolute",
-    width: 200,
-    top: 100,
+    width: 150,
+    height: 30,
+    top: 150,
+    left: 120,
     backgroundColor: "#fff",
+    borderRadius: 10,
+    textAlign: "center",
+    justifyContent: "center",
   },
-  txt1: {
+  button1: {
     position: "absolute",
+    top: 72,
+    right: 45,
+  },
+
+  view2: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

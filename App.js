@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, Text, View, TextInput, Alert } from "react-native";
-import { Button, IconButton } from "react-native-paper";
+import { Button, IconButton, Card, Paragraph, Title } from "react-native-paper";
 import axios from "axios";
 
 export default function App() {
   const [text, setText] = useState("");
-  const [temp, settemp] = useState([0]);
-  const [feel, setFeel] = useState([0]);
+  const [temp, settemp] = useState(null);
+  const [feel, setFeel] = useState(null);
+  const [city, setCity] = useState([""]);
+  const [humid, setHumid] = useState(null);
+  const [country, setCountry] = useState([""]);
 
   //API Call
   const Weatherfetch = (text) => {
@@ -16,8 +19,11 @@ export default function App() {
       url: `https://api.openweathermap.org/data/2.5/weather?q=${text}&APPID=e372c354feb0d0a782d5e94cf94ff932`,
     })
       .then((response) => {
-        settemp(response.data.main.temp - 273.15);
-        setFeel(response.data.main.feels_like - 273.15);
+        settemp(response.data.main.temp - 273);
+        setFeel(response.data.main.feels_like - 273);
+        setCity(response.data.name);
+        setHumid(response.data.main.humidity);
+        setCountry(response.data.sys.country);
         //Alert.alert("response", JSON.stringify(response.data.main.temp - 273));
         //area name,Temp,Feels like,etc etc.....in place of alert
       })
@@ -28,19 +34,14 @@ export default function App() {
 
   //Applying useffect to optimize the api call
   useEffect(() => {
-    Weatherfetch();
+    Weatherfetch(text);
   }, []);
 
-  let correcttemp = parseInt(temp).toFixed(2);
-  let correctfeels = parseInt(feel).toFixed(2);
+  let correcttemp = Number(temp).toFixed(2);
+  let correctfeels = Number(feel).toFixed(2);
 
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={{ uri: "https://cdn.wallpapersafari.com/89/3/kyN2wW.jpg" }}
-      />
-
       <TextInput
         style={styles.searchBar}
         placeholder="Enter your city"
@@ -59,11 +60,28 @@ export default function App() {
       </View>
 
       <View style={styles.view2}>
-        <Text>Temp = {correcttemp} &deg;C</Text>
-        <Text>Feels Like = {correctfeels} &deg;C</Text>
-      </View>
+        <Card style={styles.card}>
+          <Card.Content>
+            <Title style={styles.title}>Weather Information {"\n"}</Title>
 
-      <StatusBar backgroundColor="white" barStyle="light-content" />
+            <Paragraph style={styles.cardtText}>
+              Country = {country} {"\n"}
+              City Name = {city} {"\n"}
+              Temperature = {correcttemp}&deg;C {"\n"}
+              Feels Like = {correctfeels}&deg;C {"\n"}
+              Humidity = {humid}%
+            </Paragraph>
+          </Card.Content>
+        </Card>
+      </View>
+      <StatusBar hidden={true} />
+
+      <View style={styles.container2}>
+        <Text style={styles.nameText}>
+          @Mayukh Acharya{"\n"}
+          Thanks for using.
+        </Text>
+      </View>
     </View>
   );
 }
@@ -72,13 +90,9 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#4d9fe8",
     alignItems: "center",
     justifyContent: "center",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
   },
   searchBar: {
     position: "absolute",
@@ -101,5 +115,36 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  card: {
+    elevation: 5,
+    padding: 1,
+    borderRadius: 15,
+  },
+
+  cardtText: {
+    fontFamily: "monospace",
+    fontSize: 15,
+    fontWeight: "100",
+  },
+
+  title: {
+    fontFamily: "sans-serif-light",
+  },
+
+  container2: {
+    width: 400,
+    height: 95,
+    backgroundColor: "#88e39f",
+    top: 365,
+    borderRadius: 35,
+    borderBottomRightRadius: 30,
+    borderTopRightRadius: 20,
+  },
+  nameText: {
+    textAlign: "center",
+    top: 30,
+    fontFamily: "sans-serif-light",
   },
 });

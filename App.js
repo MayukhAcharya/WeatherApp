@@ -91,8 +91,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#4d9fe8",
-    alignItems: "center",
-    justifyContent: "center",
   },
   searchBar: {
     position: "absolute",
@@ -112,9 +110,10 @@ const styles = StyleSheet.create({
   },
 
   view2: {
-    position: "absolute",
+    top: 350,
     alignItems: "center",
     justifyContent: "center",
+    height: 210,
   },
 
   card: {
@@ -134,13 +133,11 @@ const styles = StyleSheet.create({
   },
 
   container2: {
-    width: 400,
+    width: 410,
     height: 95,
     backgroundColor: "#88e39f",
-    top: 365,
-    borderRadius: 35,
-    borderBottomRightRadius: 30,
-    borderTopRightRadius: 20,
+    top: 525,
+    borderRadius: 20,
   },
   nameText: {
     textAlign: "center",

@@ -11,6 +11,8 @@ export default function App() {
   const [city, setCity] = useState([""]);
   const [humid, setHumid] = useState(null);
   const [country, setCountry] = useState([""]);
+  const [desc, setDesc] = useState([""]);
+  const [cloud, setCloud] = useState(null);
 
   //API Call
   const Weatherfetch = (text) => {
@@ -24,6 +26,8 @@ export default function App() {
         setCity(response.data.name);
         setHumid(response.data.main.humidity);
         setCountry(response.data.sys.country);
+        setDesc(response.data.weather[0].description);
+        setCloud(response.data.clouds.all);
         //Alert.alert("response", JSON.stringify(response.data.main.temp - 273));
         //area name,Temp,Feels like,etc etc.....in place of alert
       })
@@ -68,8 +72,10 @@ export default function App() {
               Country = {country} {"\n"}
               City Name = {city} {"\n"}
               Temperature = {correcttemp}&deg;C {"\n"}
+              Description = {desc} {"\n"}
               Feels Like = {correctfeels}&deg;C {"\n"}
-              Humidity = {humid}%
+              Humidity = {humid}% {"\n"}
+              Cloud % ={cloud}%
             </Paragraph>
           </Card.Content>
         </Card>
@@ -113,7 +119,7 @@ const styles = StyleSheet.create({
     top: 350,
     alignItems: "center",
     justifyContent: "center",
-    height: 210,
+    height: 220,
   },
 
   card: {
@@ -136,7 +142,7 @@ const styles = StyleSheet.create({
     width: 410,
     height: 95,
     backgroundColor: "#88e39f",
-    top: 525,
+    top: 520,
     borderRadius: 20,
   },
   nameText: {

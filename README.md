@@ -16,7 +16,7 @@ How you can use the app:
 
 
 ```bash
-  git clone https://github.com/MayukhAcharya/News.git
+  git clone https://github.com/MayukhAcharya/WeatherApp.git
 ```
 ```bash
   npm install
